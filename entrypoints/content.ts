@@ -359,13 +359,12 @@ export default defineContentScript({
       },
     );
 
-    // ── Fare hareketleri başlatma ──
     void refreshGesturesFlag();
+
     browser.storage.onChanged.addListener((changes, area) => {
       if (area === 'local' && changes.settings) {
-        gesturesEnabled =
-          (changes.settings.newValue as { gesturesEnabled?: boolean } | undefined)
-            ?.gesturesEnabled ?? false;
+        const newVal = changes.settings.newValue as { gesturesEnabled?: boolean } | undefined;
+        gesturesEnabled = newVal?.gesturesEnabled ?? false;
       }
     });
 

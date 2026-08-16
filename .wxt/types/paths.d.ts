@@ -7,7 +7,9 @@ declare module "wxt/browser" {
     | "/"
     | "/background.js"
     | "/blocked.html"
+    | "/content-scripts/anti-adblock.js"
     | "/content-scripts/content.js"
+    | "/content-scripts/dark-inject.js"
     | "/icon-128.png"
     | "/icon-16.png"
     | "/icon-32.png"
@@ -15,6 +17,7 @@ declare module "wxt/browser" {
     | "/icon.svg"
     | "/options.html"
     | "/popup.html"
+    | "/rules/adblock.json"
   type HtmlPublicPath = Extract<PublicPath, `${string}.html`>
   export interface WxtRuntime {
     getURL(path: PublicPath): string;

@@ -20,7 +20,8 @@ export type Message = BackgroundMessage;
 export type ContentMessage =
   | { type: 'SET_READING_MODE'; enabled: boolean; theme: ReadingTheme }
   | { type: 'SHOW_SUMMARY'; summary: string }
-  | { type: 'SUMMARIZE_PAGE' };
+  | { type: 'SUMMARIZE_PAGE' }
+  | { type: 'TOGGLE_SITE_THEME'; enabled: boolean };
 
 export interface MessageResponse {
   ok: boolean;

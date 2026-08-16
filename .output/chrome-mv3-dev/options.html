@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis Assistant — Ayarlar</title>
+    <script type="module" crossorigin src="/chunks/options-IcjX5D7d.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/options-CkkNCmBN.css">
+  </head>
+  <body>
+    <header class="header">
+      <span class="logo">🤖</span>
+      <h1>Jarvis Assistant</h1>
+    </header>
+
+    <main class="content">
+      <section class="section">
+        <h2>Dikkat Kalkanı (Çalışma Modu)</h2>
+        <p class="hint">Çalışma modu, belirlenen süre boyunca aşağıdaki siteleri engeller.</p>
+        <div class="field">
+          <label for="work-duration">Süre (dakika)</label>
+          <input type="number" id="work-duration" min="1" max="600">
+        </div>
+        <div class="field">
+          <label for="block-list">Engellenecek siteler (her satıra bir alan adı)</label>
+          <textarea id="block-list" rows="8" placeholder="facebook.com
+youtube.com
+twitter.com"></textarea>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Uyuyan Sekmeler</h2>
+        <p class="hint">Dokunulmayan sekmeler belirlenen süre sonunda dondurularak RAM boşaltılır.</p>
+        <div class="field checkbox">
+          <input type="checkbox" id="sleep-enabled">
+          <label for="sleep-enabled">Otomatik dondurmayı etkinleştir</label>
+        </div>
+        <div class="field">
+          <label for="sleep-after">Dondurma süresi (dakika)</label>
+          <input type="number" id="sleep-after" min="1" max="180">
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Fare Hareketleri</h2>
+        <p class="hint">Sağ tıka basılı tutup çiz: ← geri, → ileri, ↑ yukarı kaydır, ↓ sekmeyi kapat.</p>
+        <div class="field checkbox">
+          <input type="checkbox" id="gestures-enabled">
+          <label for="gestures-enabled">Fare hareketlerini etkinleştir</label>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Konu Grupları</h2>
+        <p class="hint">"Konuya göre grupla" için eşleme. Her satıra <code>Konu: site1, site2</code> biçiminde yaz.</p>
+        <textarea id="topic-groups" rows="6" placeholder="Eğlence: youtube.com, netflix.com
+İş: slack.com, notion.so"></textarea>
+      </section>
+
+      <div class="actions">
+        <button id="save" class="btn-primary">Kaydet</button>
+        <span id="status" class="status"></span>
+      </div>
+    </main>
+
+  </body>
+</html>

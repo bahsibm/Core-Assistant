@@ -1,8 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Sekme Asistanı",
+  "name": "Jarvis Assistant",
   "description": "Sekme gruplama, oturum yönetimi, okuma modu, odaklanma kalkanı ve daha fazlası.",
   "version": "0.1.0",
+  "icons": {
+    "16": "icon-16.png",
+    "32": "icon-32.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
   "permissions": [
     "tabs",
     "tabGroups",
@@ -11,30 +17,45 @@
     "browsingData",
     "webNavigation",
     "contextMenus",
-    "downloads",
-    "scripting"
+    "downloads"
   ],
   "host_permissions": [
-    "<all_urls>",
-    "http://localhost/*"
+    "<all_urls>"
   ],
   "action": {
-    "default_title": "Sekme Asistanı",
+    "default_title": "Jarvis Assistant",
+    "default_icon": {
+      "16": "icon-16.png",
+      "32": "icon-32.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    },
     "default_popup": "popup.html"
-  },
-  "commands": {
-    "wxt:reload-extension": {
-      "description": "Reload the extension during development",
-      "suggested_key": {
-        "default": "Alt+R"
-      }
-    }
   },
   "background": {
     "service_worker": "background.js"
   },
-  "content_security_policy": {
-    "extension_pages": "script-src 'self' 'wasm-unsafe-eval' http://localhost:3002; object-src 'self';",
-    "sandbox": "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:3002; sandbox allow-scripts allow-forms allow-popups allow-modals; child-src 'self';"
-  }
+  "options_ui": {
+    "open_in_tab": false,
+    "page": "options.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content-scripts/content.js"
+      ]
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_start",
+      "js": [
+        "content-scripts/dark-inject.js"
+      ]
+    }
+  ]
 }

@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="tr">
   <head>
-    <script type="module" src="http://localhost:3002/@vite/client"></script>
-<script src="http://localhost:3002/@id/virtual:wxt-html-plugins" type="module"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sekme Asistanı</title>
-    <link rel="stylesheet" href="http://localhost:3002/entrypoints/popup/style.css">  <script type="module" crossorigin="" src="/chunks/reload-html-DGG3dOdy.js"></script>
-</head>
+    <title>Jarvis Assistant</title>
+    <script type="module" crossorigin src="/chunks/popup-BXDVqpog.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/popup-DBD35c7g.css">
+  </head>
   <body>
     <header class="header">
-      <span class="logo">🧩</span>
-      <h1>Sekme Asistanı</h1>
+      <span class="logo">🤖</span>
+      <h1>Jarvis Assistant</h1>
     </header>
 
     <main class="content">
       <section class="section">
         <h2>Akıllı Sekme Gruplama</h2>
         <p class="hint">Aynı siteye veya konuya ait sekmeleri tek grupta topla.</p>
+        <p id="group-unsupported" class="hint" hidden>⚠️ Bu tarayıcıda sekme gruplama desteklenmiyor (yalnızca Chrome, Edge ve Brave).</p>
         <button id="group-site" class="btn btn-primary">Siteye göre grupla</button>
         <button id="group-topic" class="btn">Konuya göre grupla</button>
 
@@ -84,8 +84,18 @@
       </section>
 
       <section class="section">
+        <h2>Web Sitesi Karanlık Modu</h2>
+        <p class="hint">Mevcut web sitesini standart karanlık moda (dark mode) çevirir.</p>
+        <div class="row">
+          <button id="theme-apply-btn" class="btn btn-primary" style="flex:1;">Karanlık Mod</button>
+          <button id="theme-clear-btn" class="btn" style="flex:1;">Orijinal Tema</button>
+        </div>
+      </section>
+
+      <section class="section">
         <h2>Uyuyan Sekmeler</h2>
-        <p class="hint">Dondurmak istediğin sekmeleri işaretle. Dokunulmayan sekmeler ayrıca 15 dk sonra otomatik dondurulur.</p>
+        <p class="hint">Dondurmak istediğin sekmeleri işaretle. Dokunulmayan sekmeler ayrıca otomatik dondurulabilir (varsayılan 15 dk).</p>
+        <button id="sleep-toggle" class="btn btn-primary" style="margin-bottom: 12px;">Otomatik uykuyu kapat</button>
         <div class="tab-select">
           <div class="tab-select-head">
             <span id="discard-count" class="tab-count">Sekmeler</span>
@@ -98,8 +108,12 @@
 
       <section class="section">
         <h2>Temizlik</h2>
-        <p class="hint">Son 1 saatin çerezlerini ve önbelleğini temizler (geçmişi değil).</p>
+        <p class="hint">Çerez + önbellek:</p>
         <button id="clear-hour" class="btn">Son 1 saati temizle</button>
+        <p class="hint">Tarama geçmişi (çerezlerden ayrı):</p>
+        <button id="clear-history-15" class="btn">Son 15 dakikayı sil</button>
+        <button id="clear-history-60" class="btn">Son 1 saati sil</button>
+        <button id="clear-history-1440" class="btn">Son 1 günü sil</button>
       </section>
 
       <section class="section">
@@ -111,6 +125,5 @@
       <p id="status" class="status" role="status"></p>
     </main>
 
-    <script type="module" src="http://localhost:3002/entrypoints/popup/main.ts"></script>
   </body>
 </html>
