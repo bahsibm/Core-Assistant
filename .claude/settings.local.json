@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(npm install *)",
+      "Bash(curl -sL --max-time 30 \"https://www.haberler.com/otomobil/elektrikli-arac-yanginlari-veriler-ne-diyor-20149868-haberi/\" -A \"Mozilla/5.0\")",
+      "Bash(grep -oE '<img[^>]{0,200}>')",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $src = \"C:\\\\Users\\\\bayra\\\\OneDrive\\\\Pictures\\\\Screenshots\\\\Ekran görüntüsü 2026-08-16 154252.png\"; $img = [System.Drawing.Image]::FromFile\\($src\\); Write-Output \"Size: $\\($img.Width\\)x$\\($img.Height\\), Format: $\\($img.RawFormat\\)\"; $dst = \"C:\\\\Users\\\\bayra\\\\OneDrive\\\\Desktop\\\\Yapay Zeka Kodlarım\\\\Tarayıcı Uzantısı\\\\screenshot.jpg\"; $img.Save\\($dst, [System.Drawing.Imaging.ImageFormat]::Jpeg\\); $img.Dispose\\(\\); Write-Output \"Saved to $dst\")"
+    ]
+  }
+}

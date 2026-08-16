@@ -1,0 +1,45 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cascadia Code', 'Consolas', ui-monospace, 'SF Mono', 'Menlo', monospace;
+  background: #0a0a0a;
+  color: #f0f0f0;
+}
+
+.blocked {
+  text-align: center;
+  padding: 24px;
+  max-width: 420px;
+}
+
+.icon {
+  font-size: 56px;
+  margin-bottom: 8px;
+}
+
+h1 {
+  font-size: 22px;
+  margin: 0 0 8px;
+  color: #ffd60a;
+  letter-spacing: 0.5px;
+}
+
+p {
+  color: #9ca3af;
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+.countdown {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffd60a;
+  margin-top: 16px;
+}
