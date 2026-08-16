@@ -4,3 +4,4 @@ node_modules/
 *.zip
 stats.html
 .DS_Store
+.claude/settings.local.json
