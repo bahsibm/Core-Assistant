@@ -1,0 +1,1 @@
+import{r as e}from"./storage-DghppI7I.js";var t=document.querySelector(`#countdown`);function n(){e().then(e=>{let n=e.endsAt-Date.now();if(!e.active||n<=0){t.textContent=`Süre doldu — çalışma modu bitti.`;return}t.textContent=`Kalan süre: ${Math.floor(n/6e4)} dk ${Math.floor(n%6e4/1e3)} sn`})}n(),setInterval(n,1e3);
