@@ -9,6 +9,8 @@ export const DEFAULT_SETTINGS: Settings = {
   blockList: DEFAULT_BLOCK_LIST,
   workDuration: 25,
   gesturesEnabled: false,
+  darkModeEnabled: false,
+  adblockEnabled: false,
 };
 
 export async function getSettings(): Promise<Settings> {

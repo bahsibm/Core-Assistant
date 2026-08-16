@@ -5,7 +5,18 @@
       "Bash(npm install *)",
       "Bash(curl -sL --max-time 30 \"https://www.haberler.com/otomobil/elektrikli-arac-yanginlari-veriler-ne-diyor-20149868-haberi/\" -A \"Mozilla/5.0\")",
       "Bash(grep -oE '<img[^>]{0,200}>')",
-      "PowerShell(Add-Type -AssemblyName System.Drawing; $src = \"C:\\\\Users\\\\bayra\\\\OneDrive\\\\Pictures\\\\Screenshots\\\\Ekran görüntüsü 2026-08-16 154252.png\"; $img = [System.Drawing.Image]::FromFile\\($src\\); Write-Output \"Size: $\\($img.Width\\)x$\\($img.Height\\), Format: $\\($img.RawFormat\\)\"; $dst = \"C:\\\\Users\\\\bayra\\\\OneDrive\\\\Desktop\\\\Yapay Zeka Kodlarım\\\\Tarayıcı Uzantısı\\\\screenshot.jpg\"; $img.Save\\($dst, [System.Drawing.Imaging.ImageFormat]::Jpeg\\); $img.Dispose\\(\\); Write-Output \"Saved to $dst\")"
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $src = \"C:\\\\Users\\\\bayra\\\\OneDrive\\\\Pictures\\\\Screenshots\\\\Ekran görüntüsü 2026-08-16 154252.png\"; $img = [System.Drawing.Image]::FromFile\\($src\\); Write-Output \"Size: $\\($img.Width\\)x$\\($img.Height\\), Format: $\\($img.RawFormat\\)\"; $dst = \"C:\\\\Users\\\\bayra\\\\OneDrive\\\\Desktop\\\\Yapay Zeka Kodlarım\\\\Tarayıcı Uzantısı\\\\screenshot.jpg\"; $img.Save\\($dst, [System.Drawing.Imaging.ImageFormat]::Jpeg\\); $img.Dispose\\(\\); Write-Output \"Saved to $dst\")",
+      "Read(//c/Program Files/Google/Chrome/Application/**)",
+      "Read(//c/Program Files \\\\\\(x86\\\\\\)/Google/Chrome/Application/**)",
+      "Read(//c/Program Files \\\\\\(x86\\\\\\)/Microsoft/Edge/Application/**)",
+      "Read(//c/Program Files/Microsoft/Edge/Application/**)",
+      "Bash(node -e \"try{require.resolve\\('pngjs'\\);console.log\\('pngjs available'\\)}catch{console.log\\('no pngjs'\\)}\")",
+      "Bash(cd /tmp)",
+      "Bash(\"/c/Program Files \\(x86\\)/Microsoft/Edge/Application/msedge.exe\" --headless=new --disable-gpu --screenshot=/tmp/light.png --window-size=400,300 --virtual-time-budget=2000 file:///tmp/test-light.html)",
+      "Bash(\"/c/Program Files \\(x86\\)/Microsoft/Edge/Application/msedge.exe\" --headless=new --disable-gpu --screenshot=/tmp/dark.png --window-size=400,300 --virtual-time-budget=2000 file:///tmp/test-dark.html)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "PowerShell($paths = @\\(\"$env:ProgramFiles\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\", \"$env:ProgramFiles \\(x86\\)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\", \"$env:ProgramFiles\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\", \"$env:ProgramFiles \\(x86\\)\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\", \"$env:LOCALAPPDATA\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\", \"$env:LOCALAPPDATA\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\"\\); foreach \\($p in $paths\\) { if \\(Test-Path $p\\) { Write-Output \"FOUND: $p\" } })"
     ]
   }
 }

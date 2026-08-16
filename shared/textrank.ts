@@ -94,8 +94,8 @@ function runPageRank(
     for (let i = 0; i < n; i++) {
       let sum = 0;
       for (let j = 0; j < n; j++) {
-        if (i !== j && weightSums[j] > 0) {
-          sum += (similarityMatrix[j][i] / weightSums[j]) * scores[j];
+        if (i !== j && weightSums[j]! > 0) {
+          sum += (similarityMatrix[j]![i]! / weightSums[j]!) * scores[j]!;
         }
       }
       next[i] += dampingFactor * sum;
@@ -166,10 +166,10 @@ function mmrSelect(
     let bestPos = -1;
 
     for (let i = 0; i < pool.length; i++) {
-      const cand = pool[i];
+      const cand = pool[i]!;
       let maxSim = 0;
       for (const sel of selected) {
-        const sim = similarity(tokenized[cand.index], tokenized[sel.index], idf);
+        const sim = similarity(tokenized[cand.index]!, tokenized[sel.index]!, idf);
         if (sim > maxSim) maxSim = sim;
       }
       const val = cand.score - lambda * maxSim;
@@ -217,9 +217,9 @@ export function summarize(text: string, maxSentences?: number): string {
   const matrix: number[][] = Array.from({ length: n }, () => new Array(n).fill(0));
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
-      const s = similarity(tokenized[i], tokenized[j], idf);
-      matrix[i][j] = s;
-      matrix[j][i] = s;
+      const s = similarity(tokenized[i]!, tokenized[j]!, idf);
+      matrix[i]![j] = s;
+      matrix[j]![i] = s;
     }
   }
 
@@ -233,10 +233,10 @@ export function summarize(text: string, maxSentences?: number): string {
   });
 
   // İlk cümleyi (lead) her zaman dahil et — haberlerde ana olay başta verilir.
-  const first = candidates[0];
+  const first = candidates[0]!;
   const rest = mmrSelect(candidates.slice(1), tokenized, idf, targetCount - 1);
   const selected = [first, ...rest];
 
-  selected.sort((a, b) => a.index - b.index);
-  return selected.map((c) => c.sentence).join(' ');
+  selected.sort((a, b) => a!.index - b!.index);
+  return selected.map((c) => c!.sentence).join(' ');
 }

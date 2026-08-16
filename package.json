@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "wxt",
-    "build": "wxt build",
+    "build": "wxt build && node scripts/postbuild.mjs",
     "zip": "wxt zip",
     "compile": "tsc --noEmit",
     "postinstall": "wxt prepare"

@@ -14,8 +14,21 @@ export default defineConfig({
       'Sekme gruplama, oturum yönetimi, okuma modu, odaklanma kalkanı ve daha fazlası.',
     version: '0.1.0',
     // İzinler özellik ekledikçe büyür. Şimdilik yalnızca "Akıllı Sekme Gruplama" için.
-    permissions: ['tabs', 'tabGroups', 'storage', 'alarms', 'browsingData', 'webNavigation', 'contextMenus', 'downloads'],
+    permissions: [
+      'tabs', 'tabGroups', 'storage', 'alarms', 'browsingData', 'webNavigation', 
+      'contextMenus', 'downloads', 'management', 'theme', 
+      'declarativeNetRequest', 'declarativeNetRequestWithHostAccess'
+    ],
     host_permissions: ['<all_urls>'],
+    declarative_net_request: {
+      rule_resources: [
+        {
+          id: 'jarvis-adblock',
+          enabled: false,
+          path: 'rules/adblock.json'
+        }
+      ]
+    },
     icons: {
       '16': 'icon-16.png',
       '32': 'icon-32.png',
@@ -30,6 +43,12 @@ export default defineConfig({
         '48': 'icon-48.png',
         '128': 'icon-128.png',
       },
+    },
+    browser_specific_settings: {
+      gecko: {
+        id: "jarvis@assistant.com",
+        strict_min_version: "109.0"
+      }
     },
   },
 });

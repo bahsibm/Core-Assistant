@@ -1,6 +1,7 @@
 import { browser } from 'wxt/browser';
 import { sendToBackground } from '../../shared/messages';
 import { getSessions, getWorkMode, getSettings, saveSettings } from '../../shared/storage';
+import { toggleBrowserTheme, findBrowserTheme } from '../../shared/browsertheme';
 import type { GroupMode, ReadingTheme, Session } from '../../shared/types';
 
 interface TabItem {
@@ -39,7 +40,14 @@ const workModeToggleBtn = document.querySelector<HTMLButtonElement>('#work-mode-
 const workModeStatusEl = document.querySelector<HTMLParagraphElement>('#work-mode-status')!;
 const workDurationInput = document.querySelector<HTMLInputElement>('#work-duration')!;
 const readingToggleBtn = document.querySelector<HTMLButtonElement>('#reading-toggle')!;
+const themeApplyBtn = document.querySelector<HTMLButtonElement>('#theme-apply-btn')!;
+const themeClearBtn = document.querySelector<HTMLButtonElement>('#theme-clear-btn')!;
+const themeToggleBtn = document.querySelector<HTMLButtonElement>('#theme-toggle-btn')!;
+const themeManageBtn = document.querySelector<HTMLButtonElement>('#theme-manage-btn')!;
+const themeStateEl = document.querySelector<HTMLParagraphElement>('#theme-state')!;
 const gesturesToggleBtn = document.querySelector<HTMLButtonElement>('#gestures-toggle')!;
+const sleepToggleBtn = document.querySelector<HTMLButtonElement>('#sleep-toggle')!;
+const adblockToggleBtn = document.querySelector<HTMLButtonElement>('#adblock-toggle')!;
 const groupUnsupportedEl = document.querySelector<HTMLParagraphElement>('#group-unsupported')!;
 
 // Sekme gruplama yalnızca tabGroups API'si olan tarayıcılarda (Chrome/Edge/Brave)
@@ -523,6 +531,85 @@ async function sendReadingMode(enabled: boolean, theme: ReadingTheme): Promise<v
   clearStatusAfter();
 }
 
+/* ------------------------------ Site Teması (Jarvis) ------------------------------ */
+
+/** Tarayıcı temasının anlık durumunu popup'ta kalıcı olarak gösterir. */
+async function refreshThemeState(): Promise<void> {
+  if (typeof browser.management?.getAll !== 'function') {
+    themeStateEl.textContent = 'Tarayıcı teması: bu tarayıcıda algılanamıyor.';
+    return;
+  }
+  const theme = await findBrowserTheme();
+  if (!theme) {
+    themeStateEl.textContent =
+      'Tarayıcı teması: yüklü değil — .output\\browser-theme klasörünü de yükleyin.';
+  } else if (theme.enabled) {
+    themeStateEl.textContent = 'Tarayıcı teması: Açık ✓ (adres çubuğu koyu)';
+  } else {
+    themeStateEl.textContent = 'Tarayıcı teması: Kapalı (adres çubuğu açık)';
+  }
+}
+
+async function refreshSiteThemeUI(): Promise<void> {
+  const settings = await getSettings();
+  if (settings.darkModeEnabled) {
+    themeApplyBtn.classList.add('btn-primary');
+    themeClearBtn.classList.remove('btn-primary');
+  } else {
+    themeClearBtn.classList.add('btn-primary');
+    themeApplyBtn.classList.remove('btn-primary');
+  }
+}
+
+async function setSiteTheme(enabled: boolean): Promise<void> {
+  const settings = await getSettings();
+  settings.darkModeEnabled = enabled;
+  await saveSettings(settings);
+  await refreshSiteThemeUI();
+
+  // Aktif sekmeye anında uygula. Diğer sekmeler storage.onChanged ile kendiliğinden
+  // güncellenir; bu mesaj yalnızca açık olan sayfada anlık geri bildirim sağlar.
+  let needsReload = false;
+  try {
+    const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+    const tab = tabs[0];
+    if (tab?.id) {
+      await browser.tabs.sendMessage(tab.id, { type: 'TOGGLE_SITE_THEME', enabled });
+    }
+  } catch {
+    // İçerik betiği yüklenmemiş: sayfa eklenti yenilenmeden önce açıktı ya da
+    // içerik betiklerinin çalışamadığı bir sayfa (edge://, mağaza vb.).
+    needsReload = true;
+  }
+
+  // 4. Tarayıcı temasını da aç/kapat (best-effort). Sayfa akışı bu noktada
+  //    zaten tamamlandı — tema çağrısı başarısız olsa bile karanlık mod bozulmaz.
+  //    management.setEnabled yalnızca tıklama bağlamında çalıştığı için burada,
+  //    popup'tan çağrılır (tıklamanın ~5 sn'lik aktivasyon penceresi içinde).
+  let themeNote = '';
+  try {
+    const themeRes = await toggleBrowserTheme(enabled);
+    if (themeRes.ok) {
+      themeNote = enabled ? ' Tarayıcı teması açıldı ✓' : ' Tarayıcı teması kapatıldı ✓';
+    } else if (themeRes.found === false) {
+      themeNote = ' Tarayıcı teması yüklü değil (adres çubuğu için).';
+    } else {
+      themeNote = ' Tarayıcı teması bu tarayıcıda elle yönetilmeli ("Tarayıcı temasını yönet").';
+    }
+  } catch {
+    themeNote = '';
+  }
+
+  const pageNote = needsReload ? ' Bu sekme için sayfayı yenileyin (F5).' : '';
+  if (enabled) {
+    setStatus(`Karanlık mod tüm sitelerde aktif.${pageNote}${themeNote}`);
+  } else {
+    setStatus(`Karanlık mod kapatıldı.${pageNote}${themeNote}`);
+  }
+  clearStatusAfter();
+  await refreshThemeState();
+}
+
 /* ------------------------------ Fare hareketleri ------------------------------ */
 
 async function refreshGesturesUI(): Promise<void> {
@@ -539,6 +626,44 @@ async function toggleGestures(): Promise<void> {
   await refreshGesturesUI();
   setStatus(settings.gesturesEnabled ? 'Fare hareketleri açık ✓' : 'Fare hareketleri kapalı');
   clearStatusAfter();
+}
+
+async function refreshSleepUI(): Promise<void> {
+  const settings = await getSettings();
+  sleepToggleBtn.textContent = settings.sleepTabsEnabled
+    ? 'Otomatik uykuyu kapat'
+    : 'Otomatik uykuyu aç';
+}
+
+async function toggleSleep(): Promise<void> {
+  const settings = await getSettings();
+  settings.sleepTabsEnabled = !settings.sleepTabsEnabled;
+  await saveSettings(settings);
+  await refreshSleepUI();
+  setStatus(settings.sleepTabsEnabled ? 'Otomatik uyku açık ✓' : 'Otomatik uyku kapalı');
+  clearStatusAfter();
+}
+
+/* ------------------------------ Reklam Engelleyici ------------------------------ */
+
+async function refreshAdblockUI(): Promise<void> {
+  const settings = await getSettings();
+  if (settings.adblockEnabled) {
+    adblockToggleBtn.textContent = 'Reklam Engelleyiciyi Kapat';
+    adblockToggleBtn.classList.remove('btn-primary');
+  } else {
+    adblockToggleBtn.textContent = 'Reklam Engelleyiciyi Aç';
+    adblockToggleBtn.classList.add('btn-primary');
+  }
+}
+
+async function toggleAdblock(): Promise<void> {
+  const settings = await getSettings();
+  settings.adblockEnabled = !settings.adblockEnabled;
+  await saveSettings(settings);
+  await refreshAdblockUI();
+  setStatus(settings.adblockEnabled ? 'Reklam engelleyici açık ✓ (Etki için sayfayı yenileyin)' : 'Reklam engelleyici kapalı');
+  clearStatusAfter(5000);
 }
 
 /* ------------------------------ Ortak ------------------------------ */
@@ -627,6 +752,8 @@ groupCustomToggleBtn.addEventListener('click', () => {
 
 workModeToggleBtn.addEventListener('click', toggleWorkMode);
 gesturesToggleBtn.addEventListener('click', toggleGestures);
+sleepToggleBtn.addEventListener('click', toggleSleep);
+adblockToggleBtn.addEventListener('click', toggleAdblock);
 
 readingToggleBtn.addEventListener('click', () => {
   void sendReadingMode(!readingModeOn, readingTheme);
@@ -637,12 +764,46 @@ document.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach((chip) => {
   });
 });
 
+themeApplyBtn.addEventListener('click', () => setSiteTheme(true));
+themeClearBtn.addEventListener('click', () => setSiteTheme(false));
+themeToggleBtn.addEventListener('click', async () => {
+  // Tema aç/kapat: management.setEnabled'ın en taze kullanıcı tıklaması
+  // bağlamında çağrıldığı tek nokta. Bu düğme çalışmıyorsa tarayıcı
+  // temaların API ile değiştirilmesine izin vermiyor demektir.
+  const theme = await findBrowserTheme();
+  if (!theme) {
+    themeStateEl.textContent =
+      'Tarayıcı teması: yüklü değil — .output\\browser-theme klasörünü de yükleyin.';
+    return;
+  }
+  try {
+    await browser.management.setEnabled(theme.id, !theme.enabled);
+  } catch (err) {
+    console.warn('Tema aç/kapat hatası:', err);
+  }
+  await refreshThemeState();
+  // Değişiklik uygulanmadıysa (tarayıcı engellediyse) bunu açıkça söyle.
+  const after = await findBrowserTheme();
+  if (after && after.enabled === theme.enabled) {
+    themeStateEl.textContent =
+      'Tarayıcı teması: değişiklik ENGELLENDİ — "Temayı yönet" ile elle değiştirin.';
+  }
+});
+themeManageBtn.addEventListener('click', () => {
+  // Elle yönetim: chrome://extensions üzerinden tema açılıp kapatılabilir.
+  void browser.tabs.create({ url: 'chrome://extensions' });
+});
+
 updateReadingUI();
 loadCurrentTabs();
 loadDiscardTabs();
 loadSessions();
 refreshWorkModeUI();
 refreshGesturesUI();
+refreshSleepUI();
+refreshAdblockUI();
+refreshSiteThemeUI();
+void refreshThemeState();
 // Çalışma modu süresini ayarlardan al (ayarlar sayfasında değiştirilebilir).
 void getSettings().then((s) => {
   workDurationInput.value = String(s.workDuration);

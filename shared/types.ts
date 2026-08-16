@@ -19,6 +19,10 @@ export interface Settings {
   workDuration: number;
   /** Fare hareketleri açık mı */
   gesturesEnabled: boolean;
+  /** Web siteleri için genel karanlık mod açık mı */
+  darkModeEnabled: boolean;
+  /** Reklam engelleyici açık mı */
+  adblockEnabled: boolean;
 }
 
 export interface WorkModeState {

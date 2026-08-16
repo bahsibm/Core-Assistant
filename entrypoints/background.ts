@@ -26,13 +26,14 @@ function colorForKey(key: string): (typeof GROUP_COLORS)[number] {
   for (let i = 0; i < key.length; i++) {
     hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
   }
-  return GROUP_COLORS[hash % GROUP_COLORS.length];
+  return GROUP_COLORS[hash % GROUP_COLORS.length] || 'grey';
 }
 
 export default defineBackground(() => {
-  browser.runtime.onInstalled.addListener(() => {
+  browser.runtime.onInstalled.addListener(async () => {
     void ensureAlarms();
     void ensureWorkModeAlarm();
+    void syncAdblockState();
     browser.contextMenus.removeAll().then(() => {
       browser.contextMenus.create({
         id: 'translate-selection',
@@ -59,6 +60,7 @@ export default defineBackground(() => {
   browser.runtime.onStartup.addListener(() => {
     void ensureAlarms();
     void ensureWorkModeAlarm();
+    void syncAdblockState();
     browser.contextMenus.removeAll().then(() => {
       browser.contextMenus.create({
         id: 'translate-selection',
@@ -134,7 +136,40 @@ export default defineBackground(() => {
       return true; // asenkron yanıt için gerekli
     },
   );
+
+  browser.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local' && changes.settings) {
+      void syncAdblockState();
+    }
+  });
 });
+
+async function syncAdblockState(): Promise<void> {
+  if (typeof browser.declarativeNetRequest === 'undefined') return;
+  try {
+    const settings = await getSettings();
+    const isEnabled = settings.adblockEnabled;
+    const rulesetId = 'jarvis-adblock';
+    
+    // Geçerli aktif kural setlerini kontrol et
+    const activeRulesets = await browser.declarativeNetRequest.getEnabledRulesets();
+    const isActive = activeRulesets.includes(rulesetId);
+    
+    if (isEnabled && !isActive) {
+      await browser.declarativeNetRequest.updateEnabledRulesets({
+        enableRulesetIds: [rulesetId],
+      });
+      console.log('[Jarvis] AdBlock aktif edildi.');
+    } else if (!isEnabled && isActive) {
+      await browser.declarativeNetRequest.updateEnabledRulesets({
+        disableRulesetIds: [rulesetId],
+      });
+      console.log('[Jarvis] AdBlock kapatıldı.');
+    }
+  } catch (err) {
+    console.warn('AdBlock senkronizasyonu başarısız:', err);
+  }
+}
 
 async function ensureAlarms(): Promise<void> {
   const existing = await browser.alarms.get(IDLE_ALARM);
@@ -268,10 +303,10 @@ async function groupTabs(mode: GroupMode): Promise<number> {
 
       try {
         if (existingGroupId != null) {
-          await browser.tabs.group({ tabIds, groupId: existingGroupId });
+          await browser.tabs.group({ tabIds: tabIds as [number, ...number[]], groupId: existingGroupId });
           groupCount += 1;
         } else if (tabIds.length >= 2) {
-          const groupId = await browser.tabs.group({ tabIds });
+          const groupId = (await browser.tabs.group({ tabIds: tabIds as [number, ...number[]] })) as unknown as number;
           await browser.tabGroups.update(groupId, {
             title,
             color: colorForKey(title),
@@ -301,7 +336,7 @@ async function groupSelected(tabIds: number[], name: string): Promise<number> {
   if (tabIds.length < 2) throw new Error('Grup için en az 2 sekme seç.');
 
   const title = name.trim() || 'Özel Grup';
-  const groupId = await browser.tabs.group({ tabIds });
+  const groupId = (await browser.tabs.group({ tabIds: tabIds as [number, ...number[]] })) as unknown as number;
   await browser.tabGroups.update(groupId, {
     title,
     color: colorForKey(title),
