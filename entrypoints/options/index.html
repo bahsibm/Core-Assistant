@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="tr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Core Assistant — Ayarlar</title>
+    <title>Core Assistant — Settings</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
@@ -14,48 +14,48 @@
 
     <main class="content">
       <section class="section">
-        <h2>Dikkat Kalkanı (Çalışma Modu)</h2>
-        <p class="hint">Çalışma modu, belirlenen süre boyunca aşağıdaki siteleri engeller.</p>
+        <h2>Focus Shield (Work Mode)</h2>
+        <p class="hint">Work mode blocks the following sites for the specified duration.</p>
         <div class="field">
-          <label for="work-duration">Süre (dakika)</label>
+          <label for="work-duration">Duration (minutes)</label>
           <input type="number" id="work-duration" min="1" max="600" />
         </div>
         <div class="field">
-          <label for="block-list">Engellenecek siteler (her satıra bir alan adı)</label>
+          <label for="block-list">Sites to block (one domain per line)</label>
           <textarea id="block-list" rows="8" placeholder="facebook.com&#10;youtube.com&#10;twitter.com"></textarea>
         </div>
       </section>
 
       <section class="section">
-        <h2>Uyuyan Sekmeler</h2>
-        <p class="hint">Dokunulmayan sekmeler belirlenen süre sonunda dondurularak RAM boşaltılır.</p>
+        <h2>Sleeping Tabs</h2>
+        <p class="hint">Idle tabs are frozen after the set time to free up RAM.</p>
         <div class="field checkbox">
           <input type="checkbox" id="sleep-enabled" />
-          <label for="sleep-enabled">Otomatik dondurmayı etkinleştir</label>
+          <label for="sleep-enabled">Enable auto-sleep</label>
         </div>
         <div class="field">
-          <label for="sleep-after">Dondurma süresi (dakika)</label>
+          <label for="sleep-after">Idle time before sleep (minutes)</label>
           <input type="number" id="sleep-after" min="1" max="180" />
         </div>
       </section>
 
       <section class="section">
-        <h2>Fare Hareketleri</h2>
-        <p class="hint">Sağ tıka basılı tutup çiz: ← geri, → ileri, ↑ yukarı kaydır, ↓ sekmeyi kapat.</p>
+        <h2>Mouse Gestures</h2>
+        <p class="hint">Right-click & drag: ← back, → forward, ↑ scroll up, ↓ close tab.</p>
         <div class="field checkbox">
           <input type="checkbox" id="gestures-enabled" />
-          <label for="gestures-enabled">Fare hareketlerini etkinleştir</label>
+          <label for="gestures-enabled">Enable mouse gestures</label>
         </div>
       </section>
 
       <section class="section">
-        <h2>Konu Grupları</h2>
-        <p class="hint">"Konuya göre grupla" için eşleme. Her satıra <code>Konu: site1, site2</code> biçiminde yaz.</p>
-        <textarea id="topic-groups" rows="6" placeholder="Eğlence: youtube.com, netflix.com&#10;İş: slack.com, notion.so"></textarea>
+        <h2>Topic Groups</h2>
+        <p class="hint">Mapping for "Group by topic". Format each line as <code>Topic: site1, site2</code>.</p>
+        <textarea id="topic-groups" rows="6" placeholder="Entertainment: youtube.com, netflix.com&#10;Work: slack.com, notion.so"></textarea>
       </section>
 
       <div class="actions">
-        <button id="save" class="btn-primary">Kaydet</button>
+        <button id="save" class="btn-primary">Save</button>
         <span id="status" class="status"></span>
       </div>
     </main>

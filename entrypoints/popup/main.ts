@@ -83,21 +83,21 @@ function clearStatusAfter(ms = 3000): void {
 /* ------------------------------ Sekme gruplama ------------------------------ */
 
 async function runGroup(mode: GroupMode): Promise<void> {
-  setStatus('Gruplanıyor…');
+  setStatus('Grouping…');
   try {
     const res = await sendToBackground({ type: 'GROUP_TABS', mode });
     if (res?.ok) {
       const count = res.count ?? 0;
       setStatus(
         count > 0
-          ? `${count} grup oluşturuldu ✓`
-          : 'Gruplanacak sekme yok (her sitede en az 2 sekme gerekir).',
+          ? `${count} groups created ✓`
+          : 'No tabs to group (at least 2 per site required).',
       );
     } else {
-      setStatus(`Hata: ${res?.error ?? 'bilinmiyor'}`);
+      setStatus(`Error: ${res?.error ?? 'unknown'}`);
     }
   } catch (err) {
-    setStatus(`Hata: ${err instanceof Error ? err.message : String(err)}`);
+    setStatus(`Error: ${err instanceof Error ? err.message : String(err)}`);
   }
   clearStatusAfter();
 }
@@ -127,12 +127,12 @@ async function loadGroupTabs(): Promise<void> {
 
 function renderGroupList(): void {
   groupListEl.innerHTML = '';
-  groupCountEl.textContent = `Sekmeler (${groupTabs.length})`;
+  groupCountEl.textContent = `Tabs (${groupTabs.length})`;
 
   if (groupTabs.length === 0) {
     const li = document.createElement('li');
     li.className = 'tab-empty';
-    li.textContent = 'Gruplanabilir sekme yok.';
+    li.textContent = 'No tabs available to group.';
     groupListEl.appendChild(li);
     return;
   }
@@ -145,12 +145,12 @@ function renderGroupList(): void {
 async function runGroupSelected(): Promise<void> {
   const ids = groupTabs.filter((t) => t.checked).map((t) => t.id);
   if (ids.length < 2) {
-    setStatus('Grup için en az 2 sekme seç.');
+    setStatus('Select at least 2 tabs for a group.');
     clearStatusAfter();
     return;
   }
 
-  setStatus('Gruplanıyor…');
+  setStatus('Grouping…');
   try {
     const res = await sendToBackground({
       type: 'GROUP_SELECTED',
@@ -159,13 +159,13 @@ async function runGroupSelected(): Promise<void> {
     });
     if (res?.ok) {
       groupNameInput.value = '';
-      setStatus('Grup oluşturuldu ✓');
+      setStatus('Group created ✓');
       await loadGroupTabs();
     } else {
-      setStatus(`Hata: ${res?.error ?? 'bilinmiyor'}`);
+      setStatus(`Error: ${res?.error ?? 'unknown'}`);
     }
   } catch (err) {
-    setStatus(`Hata: ${err instanceof Error ? err.message : String(err)}`);
+    setStatus(`Error: ${err instanceof Error ? err.message : String(err)}`);
   }
   clearStatusAfter();
 }
@@ -193,12 +193,12 @@ async function loadCurrentTabs(): Promise<void> {
 
 function renderTabList(): void {
   tabListEl.innerHTML = '';
-  tabCountEl.textContent = `Sekmeler (${currentTabs.length})`;
+  tabCountEl.textContent = `Tabs (${currentTabs.length})`;
 
   if (currentTabs.length === 0) {
     const li = document.createElement('li');
     li.className = 'tab-empty';
-    li.textContent = 'Kaydedilecek sekme yok.';
+    li.textContent = 'No tabs available to save.';
     tabListEl.appendChild(li);
     return;
   }
@@ -212,19 +212,19 @@ async function doSaveSession(name: string): Promise<void> {
   const trimmed = name.trim();
   if (!trimmed) {
     sessionNameInput.focus();
-    setStatus('Lütfen bir ad gir.');
+    setStatus('Please enter a name.');
     clearStatusAfter();
     return;
   }
 
   const selected = currentTabs.filter((t) => t.checked);
   if (selected.length === 0) {
-    setStatus('Lütfen kaydedilecek en az bir sekme seç.');
+    setStatus('Please select at least one tab to save.');
     clearStatusAfter();
     return;
   }
 
-  setStatus('Kaydediliyor…');
+  setStatus('Saving…');
   try {
     const sessionTabs = selected.map((t) => ({
       url: t.url,
@@ -239,24 +239,24 @@ async function doSaveSession(name: string): Promise<void> {
 
     if (res?.ok) {
       sessionNameInput.value = '';
-      setStatus('Oturum kaydedildi ✓');
+      setStatus('Session saved ✓');
       await loadSessions();
     } else {
-      setStatus(`Hata: ${res?.error ?? 'bilinmiyor'}`);
+      setStatus(`Error: ${res?.error ?? 'unknown'}`);
     }
   } catch (err) {
-    setStatus(`Hata: ${err instanceof Error ? err.message : String(err)}`);
+    setStatus(`Error: ${err instanceof Error ? err.message : String(err)}`);
   }
   clearStatusAfter();
 }
 
 async function doRestoreSession(id: string): Promise<void> {
-  setStatus('Açılıyor…');
+  setStatus('Opening…');
   try {
     const res = await sendToBackground({ type: 'RESTORE_SESSION', id });
-    setStatus(res?.ok ? 'Oturum açıldı ✓' : `Hata: ${res?.error ?? 'bilinmiyor'}`);
+    setStatus(res?.ok ? 'Session opened ✓' : `Error: ${res?.error ?? 'unknown'}`);
   } catch (err) {
-    setStatus(`Hata: ${err instanceof Error ? err.message : String(err)}`);
+    setStatus(`Error: ${err instanceof Error ? err.message : String(err)}`);
   }
   clearStatusAfter();
 }
@@ -265,13 +265,13 @@ async function doDeleteSession(id: string): Promise<void> {
   try {
     const res = await sendToBackground({ type: 'DELETE_SESSION', id });
     if (res?.ok) {
-      setStatus('Oturum silindi.');
+      setStatus('Session deleted.');
       await loadSessions();
     } else {
-      setStatus(`Hata: ${res?.error ?? 'bilinmiyor'}`);
+      setStatus(`Error: ${res?.error ?? 'unknown'}`);
     }
   } catch (err) {
-    setStatus(`Hata: ${err instanceof Error ? err.message : String(err)}`);
+    setStatus(`Error: ${err instanceof Error ? err.message : String(err)}`);
   }
   clearStatusAfter();
 }
@@ -285,7 +285,7 @@ function renderSessions(sessions: Session[]): void {
   if (sessions.length === 0) {
     const li = document.createElement('li');
     li.className = 'session-empty';
-    li.textContent = 'Henüz kayıtlı oturum yok.';
+    li.textContent = 'No saved sessions yet.';
     sessionListEl.appendChild(li);
     return;
   }
@@ -303,7 +303,7 @@ function renderSessions(sessions: Session[]): void {
 
     const metaEl = document.createElement('div');
     metaEl.className = 'session-meta';
-    metaEl.textContent = `${s.tabs.length} sekme · ${formatDate(s.createdAt)}`;
+    metaEl.textContent = `${s.tabs.length} tabs · ${formatDate(s.createdAt)}`;
 
     info.append(nameEl, metaEl);
 
@@ -312,14 +312,14 @@ function renderSessions(sessions: Session[]): void {
 
     const openBtn = document.createElement('button');
     openBtn.className = 'mini-btn';
-    openBtn.textContent = 'Aç';
-    openBtn.title = 'Sekmeleri bu pencerede aç';
+    openBtn.textContent = 'Open';
+    openBtn.title = 'Tabsi bu pencerede aç';
     openBtn.addEventListener('click', () => doRestoreSession(s.id));
 
     const delBtn = document.createElement('button');
     delBtn.className = 'mini-btn danger';
-    delBtn.textContent = 'Sil';
-    delBtn.title = 'Oturumu sil';
+    delBtn.textContent = 'Delete';
+    delBtn.title = 'Delete session';
     delBtn.addEventListener('click', () => doDeleteSession(s.id));
 
     actions.append(openBtn, delBtn);
@@ -363,12 +363,12 @@ async function loadDiscardTabs(): Promise<void> {
 
 function renderDiscardList(): void {
   discardListEl.innerHTML = '';
-  discardCountEl.textContent = `Sekmeler (${discardTabs.length})`;
+  discardCountEl.textContent = `Tabs (${discardTabs.length})`;
 
   if (discardTabs.length === 0) {
     const li = document.createElement('li');
     li.className = 'tab-empty';
-    li.textContent = 'Dondurulabilir arka plan sekmesi yok.';
+    li.textContent = 'No background tabs available to freeze.';
     discardListEl.appendChild(li);
     return;
   }
@@ -381,22 +381,22 @@ function renderDiscardList(): void {
 async function runDiscardSelected(): Promise<void> {
   const ids = discardTabs.filter((t) => t.checked).map((t) => t.id);
   if (ids.length === 0) {
-    setStatus('Lütfen dondurulacak en az bir sekme seç.');
+    setStatus('Please select at least one tab to freeze.');
     clearStatusAfter();
     return;
   }
 
-  setStatus('Donduruluyor…');
+  setStatus('Freezing…');
   try {
     const res = await sendToBackground({ type: 'DISCARD_TABS', tabIds: ids });
     if (res?.ok) {
-      setStatus(`${res.count ?? 0} sekme donduruldu ✓`);
+      setStatus(`${res.count ?? 0} tabs frozen ✓`);
       await loadDiscardTabs();
     } else {
-      setStatus(`Hata: ${res?.error ?? 'bilinmiyor'}`);
+      setStatus(`Error: ${res?.error ?? 'unknown'}`);
     }
   } catch (err) {
-    setStatus(`Hata: ${err instanceof Error ? err.message : String(err)}`);
+    setStatus(`Error: ${err instanceof Error ? err.message : String(err)}`);
   }
   clearStatusAfter();
 }
@@ -404,29 +404,29 @@ async function runDiscardSelected(): Promise<void> {
 /* ------------------------------ Temizlik ------------------------------ */
 
 async function runClearLastHour(): Promise<void> {
-  setStatus('Temizleniyor…');
+  setStatus('Cleaning…');
   try {
     const res = await sendToBackground({ type: 'CLEAR_LAST_HOUR' });
     setStatus(
       res?.ok
-        ? 'Son 1 saatin çerezleri ve önbelleği temizlendi ✓'
-        : `Hata: ${res?.error ?? 'bilinmiyor'}`,
+        ? 'Cookies and cache for the last hour cleared ✓'
+        : `Error: ${res?.error ?? 'unknown'}`,
     );
   } catch (err) {
-    setStatus(`Hata: ${err instanceof Error ? err.message : String(err)}`);
+    setStatus(`Error: ${err instanceof Error ? err.message : String(err)}`);
   }
   clearStatusAfter();
 }
 
 async function runClearHistory(minutes: number, label: string): Promise<void> {
-  setStatus('Geçmiş temizleniyor…');
+  setStatus('Clearing history…');
   try {
     const res = await sendToBackground({ type: 'CLEAR_HISTORY', minutes });
     setStatus(
-      res?.ok ? `${label} geçmişi silindi ✓` : `Hata: ${res?.error ?? 'bilinmiyor'}`,
+      res?.ok ? `${label} history cleared ✓` : `Error: ${res?.error ?? 'unknown'}`,
     );
   } catch (err) {
-    setStatus(`Hata: ${err instanceof Error ? err.message : String(err)}`);
+    setStatus(`Error: ${err instanceof Error ? err.message : String(err)}`);
   }
   clearStatusAfter();
 }
@@ -438,10 +438,10 @@ async function refreshWorkModeUI(): Promise<void> {
   const active = state.active && Date.now() < state.endsAt;
   if (active) {
     const mins = Math.max(1, Math.ceil((state.endsAt - Date.now()) / 60000));
-    workModeToggleBtn.textContent = 'Çalışma modunu bitir';
-    workModeStatusEl.textContent = `Aktif · ~${mins} dk kaldı`;
+    workModeToggleBtn.textContent = 'Stop work mode';
+    workModeStatusEl.textContent = `Active · ~${mins} min left`;
   } else {
-    workModeToggleBtn.textContent = 'Çalışma modunu başlat';
+    workModeToggleBtn.textContent = 'Start work mode';
     workModeStatusEl.textContent = '';
   }
 }
@@ -451,17 +451,17 @@ async function toggleWorkMode(): Promise<void> {
   const active = state.active && Date.now() < state.endsAt;
 
   if (active) {
-    setStatus('Durduruluyor…');
+    setStatus('Stopping…');
     try {
       const res = await sendToBackground({ type: 'STOP_WORK_MODE' });
       if (res?.ok) {
-        setStatus('Çalışma modu durduruldu.');
+        setStatus('Work mode stopped.');
         await refreshWorkModeUI();
       } else {
-        setStatus(`Hata: ${res?.error ?? 'bilinmiyor'}`);
+        setStatus(`Error: ${res?.error ?? 'unknown'}`);
       }
     } catch (err) {
-      setStatus(`Hata: ${err instanceof Error ? err.message : String(err)}`);
+      setStatus(`Error: ${err instanceof Error ? err.message : String(err)}`);
     }
     clearStatusAfter();
     return;
@@ -469,22 +469,22 @@ async function toggleWorkMode(): Promise<void> {
 
   const minutes = parseInt(workDurationInput.value, 10);
   if (!Number.isFinite(minutes) || minutes < 1) {
-    setStatus('Lütfen geçerli bir süre gir (en az 1 dk).');
+    setStatus('Please enter a valid duration (min 1 min).');
     clearStatusAfter();
     return;
   }
 
-  setStatus('Başlatılıyor…');
+  setStatus('Starting…');
   try {
     const res = await sendToBackground({ type: 'START_WORK_MODE', minutes });
     if (res?.ok) {
-      setStatus('Çalışma modu başladı ✓');
+      setStatus('Work mode started ✓');
       await refreshWorkModeUI();
     } else {
-      setStatus(`Hata: ${res?.error ?? 'bilinmiyor'}`);
+      setStatus(`Error: ${res?.error ?? 'unknown'}`);
     }
   } catch (err) {
-    setStatus(`Hata: ${err instanceof Error ? err.message : String(err)}`);
+    setStatus(`Error: ${err instanceof Error ? err.message : String(err)}`);
   }
   clearStatusAfter();
 }
@@ -492,14 +492,14 @@ async function toggleWorkMode(): Promise<void> {
 /* ------------------------------ Okuma modu ------------------------------ */
 
 function updateReadingUI(): void {
-  readingToggleBtn.textContent = readingModeOn ? 'Okuma modunu kapat' : 'Okuma modunu aç';
+  readingToggleBtn.textContent = readingModeOn ? 'Turn off reading mode' : 'Turn on reading mode';
 }
 
 async function sendReadingMode(enabled: boolean, theme: ReadingTheme): Promise<void> {
   const tabs = await browser.tabs.query({ active: true, currentWindow: true });
   const tab = tabs[0];
   if (!tab?.id) {
-    setStatus('Aktif sekme bulunamadı.');
+    setStatus('No active tab found.');
     clearStatusAfter();
     return;
   }
@@ -514,8 +514,8 @@ async function sendReadingMode(enabled: boolean, theme: ReadingTheme): Promise<v
     if (enabled && !res?.ok) {
       setStatus(
         res?.error
-          ? `Hata: ${res.error}`
-          : 'Bu sayfada okunabilir makale içeriği bulunamadı.',
+          ? `Error: ${res.error}`
+          : 'No readable article content found on this page.',
       );
       clearStatusAfter();
       return;
@@ -524,9 +524,9 @@ async function sendReadingMode(enabled: boolean, theme: ReadingTheme): Promise<v
     readingModeOn = enabled;
     readingTheme = theme;
     updateReadingUI();
-    setStatus(enabled ? 'Okuma modu açık ✓' : 'Okuma modu kapalı');
+    setStatus(enabled ? 'Reading mode on ✓' : 'Reading mode off');
   } catch {
-    setStatus('Okuma modu yüklenemedi — sayfayı yenileyip (F5) tekrar deneyin.');
+    setStatus('Could not load reading mode — refresh (F5) and try again.');
   }
   clearStatusAfter();
 }
@@ -536,17 +536,17 @@ async function sendReadingMode(enabled: boolean, theme: ReadingTheme): Promise<v
 /** Tarayıcı temasının anlık durumunu popup'ta kalıcı olarak gösterir. */
 async function refreshThemeState(): Promise<void> {
   if (typeof browser.management?.getAll !== 'function') {
-    themeStateEl.textContent = 'Tarayıcı teması: bu tarayıcıda algılanamıyor.';
+    themeStateEl.textContent = 'Browser theme: cannot be detected in this browser.';
     return;
   }
   const theme = await findBrowserTheme();
   if (!theme) {
     themeStateEl.textContent =
-      'Tarayıcı teması: yüklü değil — .output\\browser-theme klasörünü de yükleyin.';
+      'Browser theme: not installed — please install .output\\browser-theme.';
   } else if (theme.enabled) {
-    themeStateEl.textContent = 'Tarayıcı teması: Açık ✓ (adres çubuğu koyu)';
+    themeStateEl.textContent = 'Browser theme: On ✓ (dark address bar)';
   } else {
-    themeStateEl.textContent = 'Tarayıcı teması: Kapalı (adres çubuğu açık)';
+    themeStateEl.textContent = 'Browser theme: Off (light address bar)';
   }
 }
 
@@ -590,9 +590,9 @@ async function setSiteTheme(enabled: boolean): Promise<void> {
   try {
     const themeRes = await toggleBrowserTheme(enabled);
     if (themeRes.ok) {
-      themeNote = enabled ? ' Tarayıcı teması açıldı ✓' : ' Tarayıcı teması kapatıldı ✓';
+      themeNote = enabled ? ' Browser theme turned on ✓' : ' Browser theme turned off ✓';
     } else if (themeRes.found === false) {
-      themeNote = ' Tarayıcı teması yüklü değil (adres çubuğu için).';
+      themeNote = ' Browser theme not installed.';
     } else {
       themeNote = ' Tarayıcı teması bu tarayıcıda elle yönetilmeli ("Tarayıcı temasını yönet").';
     }
@@ -600,11 +600,11 @@ async function setSiteTheme(enabled: boolean): Promise<void> {
     themeNote = '';
   }
 
-  const pageNote = needsReload ? ' Bu sekme için sayfayı yenileyin (F5).' : '';
+  const pageNote = needsReload ? ' Refresh this tab (F5).' : '';
   if (enabled) {
-    setStatus(`Karanlık mod tüm sitelerde aktif.${pageNote}${themeNote}`);
+    setStatus(`Dark mode active on all sites.${pageNote}${themeNote}`);
   } else {
-    setStatus(`Karanlık mod kapatıldı.${pageNote}${themeNote}`);
+    setStatus(`Dark mode turned off.${pageNote}${themeNote}`);
   }
   clearStatusAfter();
   await refreshThemeState();
@@ -615,8 +615,8 @@ async function setSiteTheme(enabled: boolean): Promise<void> {
 async function refreshGesturesUI(): Promise<void> {
   const settings = await getSettings();
   gesturesToggleBtn.textContent = settings.gesturesEnabled
-    ? 'Fare hareketlerini kapat'
-    : 'Fare hareketlerini aç';
+    ? 'Disable mouse gestures'
+    : 'Enable mouse gestures';
 }
 
 async function toggleGestures(): Promise<void> {
@@ -624,15 +624,15 @@ async function toggleGestures(): Promise<void> {
   settings.gesturesEnabled = !settings.gesturesEnabled;
   await saveSettings(settings);
   await refreshGesturesUI();
-  setStatus(settings.gesturesEnabled ? 'Fare hareketleri açık ✓' : 'Fare hareketleri kapalı');
+  setStatus(settings.gesturesEnabled ? 'Mouse gestures on ✓' : 'Mouse gestures off');
   clearStatusAfter();
 }
 
 async function refreshSleepUI(): Promise<void> {
   const settings = await getSettings();
   sleepToggleBtn.textContent = settings.sleepTabsEnabled
-    ? 'Otomatik uykuyu kapat'
-    : 'Otomatik uykuyu aç';
+    ? 'Disable auto-sleep'
+    : 'Enable auto-sleep';
 }
 
 async function toggleSleep(): Promise<void> {
@@ -640,7 +640,7 @@ async function toggleSleep(): Promise<void> {
   settings.sleepTabsEnabled = !settings.sleepTabsEnabled;
   await saveSettings(settings);
   await refreshSleepUI();
-  setStatus(settings.sleepTabsEnabled ? 'Otomatik uyku açık ✓' : 'Otomatik uyku kapalı');
+  setStatus(settings.sleepTabsEnabled ? 'Auto-sleep on ✓' : 'Auto-sleep off');
   clearStatusAfter();
 }
 
@@ -649,10 +649,10 @@ async function toggleSleep(): Promise<void> {
 async function refreshAdblockUI(): Promise<void> {
   const settings = await getSettings();
   if (settings.adblockEnabled) {
-    adblockToggleBtn.textContent = 'Reklam Engelleyiciyi Kapat';
+    adblockToggleBtn.textContent = 'Turn off Ad Blocker';
     adblockToggleBtn.classList.remove('btn-primary');
   } else {
-    adblockToggleBtn.textContent = 'Reklam Engelleyiciyi Aç';
+    adblockToggleBtn.textContent = 'Turn on Ad Blocker';
     adblockToggleBtn.classList.add('btn-primary');
   }
 }
@@ -662,7 +662,7 @@ async function toggleAdblock(): Promise<void> {
   settings.adblockEnabled = !settings.adblockEnabled;
   await saveSettings(settings);
   await refreshAdblockUI();
-  setStatus(settings.adblockEnabled ? 'Reklam engelleyici açık ✓ (Etki için sayfayı yenileyin)' : 'Reklam engelleyici kapalı');
+  setStatus(settings.adblockEnabled ? 'Ad blocker on ✓ (Refresh to see effect)' : 'Ad blocker off');
   clearStatusAfter(5000);
 }
 
@@ -732,9 +732,9 @@ discardToggleAllBtn.addEventListener('click', () => {
 
 discardSelectedBtn.addEventListener('click', runDiscardSelected);
 clearBtn.addEventListener('click', runClearLastHour);
-clearHistory15Btn.addEventListener('click', () => runClearHistory(15, 'Son 15 dk'));
-clearHistory60Btn.addEventListener('click', () => runClearHistory(60, 'Son 1 saat'));
-clearHistory1440Btn.addEventListener('click', () => runClearHistory(1440, 'Son 1 gün'));
+clearHistory15Btn.addEventListener('click', () => runClearHistory(15, 'Last 15 min'));
+clearHistory60Btn.addEventListener('click', () => runClearHistory(60, 'Last 1 hour'));
+clearHistory1440Btn.addEventListener('click', () => runClearHistory(1440, 'Last 1 day'));
 groupSelectedBtn.addEventListener('click', runGroupSelected);
 groupToggleAllBtn.addEventListener('click', () => {
   const allChecked = groupTabs.length > 0 && groupTabs.every((t) => t.checked);
@@ -773,20 +773,20 @@ themeToggleBtn.addEventListener('click', async () => {
   const theme = await findBrowserTheme();
   if (!theme) {
     themeStateEl.textContent =
-      'Tarayıcı teması: yüklü değil — .output\\browser-theme klasörünü de yükleyin.';
+      'Browser theme: not installed — please install .output\\browser-theme.';
     return;
   }
   try {
     await browser.management.setEnabled(theme.id, !theme.enabled);
   } catch (err) {
-    console.warn('Tema aç/kapat hatası:', err);
+    console.warn('Theme toggle error:', err);
   }
   await refreshThemeState();
   // Değişiklik uygulanmadıysa (tarayıcı engellediyse) bunu açıkça söyle.
   const after = await findBrowserTheme();
   if (after && after.enabled === theme.enabled) {
     themeStateEl.textContent =
-      'Tarayıcı teması: değişiklik ENGELLENDİ — "Temayı yönet" ile elle değiştirin.';
+      'Browser theme: change BLOCKED — manage manually.';
   }
 });
 themeManageBtn.addEventListener('click', () => {

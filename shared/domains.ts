@@ -33,12 +33,12 @@ export function registrableDomain(url: string): string | null {
 
 /** Varsayılan konu grupları. Kullanıcı ayarlardan düzenleyebilir. */
 export const DEFAULT_TOPIC_GROUPS: Record<string, string[]> = {
-  Eğlence: ['youtube.com', 'netflix.com', 'twitch.tv', 'spotify.com', 'disneyplus.com'],
-  Sosyal: ['twitter.com', 'x.com', 'facebook.com', 'instagram.com', 'reddit.com', 'tiktok.com', 'linkedin.com'],
-  Geliştirme: ['github.com', 'stackoverflow.com', 'gitlab.com', 'npmjs.com'],
-  Haber: ['cnn.com', 'bbc.com', 'reuters.com', 'nytimes.com', 'hurriyet.com.tr', 'sabah.com.tr'],
-  Alışveriş: ['amazon.com', 'hepsiburada.com', 'trendyol.com', 'n11.com', 'aliexpress.com'],
-  İş: ['notion.so', 'slack.com', 'gmail.com', 'docs.google.com', 'drive.google.com', 'asana.com', 'trello.com'],
+  Entertainment: ['youtube.com', 'netflix.com', 'twitch.tv', 'spotify.com', 'disneyplus.com'],
+  Social: ['twitter.com', 'x.com', 'facebook.com', 'instagram.com', 'reddit.com', 'tiktok.com', 'linkedin.com'],
+  Development: ['github.com', 'stackoverflow.com', 'gitlab.com', 'npmjs.com'],
+  News: ['cnn.com', 'bbc.com', 'reuters.com', 'nytimes.com', 'hurriyet.com.tr', 'sabah.com.tr'],
+  Shopping: ['amazon.com', 'hepsiburada.com', 'trendyol.com', 'n11.com', 'aliexpress.com'],
+  Work: ['notion.so', 'slack.com', 'gmail.com', 'docs.google.com', 'drive.google.com', 'asana.com', 'trello.com'],
 };
 
 /** Bir alan adının hangi konuya ait olduğunu döndürür (yoksa null). */

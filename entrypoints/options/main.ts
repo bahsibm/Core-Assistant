@@ -54,7 +54,7 @@ async function save(): Promise<void> {
   settings.topicGroups = topicGroupsFromString(topicGroupsInput.value);
 
   await saveSettings(settings);
-  statusEl.textContent = 'Kaydedildi ✓';
+  statusEl.textContent = 'Saved ✓';
   setTimeout(() => {
     statusEl.textContent = '';
   }, 2000);
