@@ -149,7 +149,7 @@ async function syncAdblockState(): Promise<void> {
   try {
     const settings = await getSettings();
     const isEnabled = settings.adblockEnabled;
-    const rulesetId = 'jarvis-adblock';
+    const rulesetId = 'core-adblock';
     
     // Geçerli aktif kural setlerini kontrol et
     const activeRulesets = await browser.declarativeNetRequest.getEnabledRulesets();
@@ -159,12 +159,12 @@ async function syncAdblockState(): Promise<void> {
       await browser.declarativeNetRequest.updateEnabledRulesets({
         enableRulesetIds: [rulesetId],
       });
-      console.log('[Jarvis] AdBlock aktif edildi.');
+      console.log('[Core] AdBlock aktif edildi.');
     } else if (!isEnabled && isActive) {
       await browser.declarativeNetRequest.updateEnabledRulesets({
         disableRulesetIds: [rulesetId],
       });
-      console.log('[Jarvis] AdBlock kapatıldı.');
+      console.log('[Core] AdBlock kapatıldı.');
     }
   } catch (err) {
     console.warn('AdBlock senkronizasyonu başarısız:', err);

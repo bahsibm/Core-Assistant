@@ -14,7 +14,7 @@
 
 import { browser } from 'wxt/browser';
 
-export const BROWSER_THEME_NAME = 'Jarvis Dark Browser Theme';
+export const BROWSER_THEME_NAME = 'Core Dark Browser Theme';
 
 const THEME_COLORS: Record<string, [number, number, number]> = {
   frame: [24, 26, 27],

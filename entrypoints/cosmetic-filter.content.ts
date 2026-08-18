@@ -14,7 +14,7 @@ export default defineContentScript({
     let enabled = data.settings?.adblockEnabled ?? false;
     
     // Adblock durumunu ana sayfaya (MAIN world) ilet
-    window.postMessage({ type: 'JARVIS_ADBLOCK_STATE', enabled }, '*');
+    window.postMessage({ type: 'CORE_ADBLOCK_STATE', enabled }, '*');
 
     let styleElement: HTMLStyleElement | null = null;
     let observer: MutationObserver | null = null;
@@ -77,7 +77,7 @@ ${adSelectorsString} {
       document.querySelectorAll('iframe').forEach(iframe => {
         // İlgili boyutlarda ve reklama benzeyen iframe'leri kaldır
         const rect = iframe.getBoundingClientRect();
-        const adSizes = [
+        const adSizes: [number, number][] = [
           [300, 250], [728, 90], [160, 600], [970, 250], [300, 600], [320, 50], [320, 100], [970, 90]
         ];
         
@@ -133,7 +133,7 @@ ${adSelectorsString} {
       // CSS stil öğesini ekle
       if (!styleElement) {
         styleElement = document.createElement('style');
-        styleElement.id = 'jarvis-cosmetic-filter';
+        styleElement.id = 'core-cosmetic-filter';
         styleElement.textContent = cssString;
         
         if (document.head) {
@@ -189,7 +189,7 @@ ${adSelectorsString} {
         enabled = newVal?.adblockEnabled ?? false;
         
         // Yeni durumu bildir
-        window.postMessage({ type: 'JARVIS_ADBLOCK_STATE', enabled }, '*');
+        window.postMessage({ type: 'CORE_ADBLOCK_STATE', enabled }, '*');
 
         if (enabled && !wasEnabled) {
           startFiltering();

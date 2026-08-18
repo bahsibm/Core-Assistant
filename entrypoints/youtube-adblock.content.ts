@@ -9,7 +9,7 @@ export default defineContentScript({
       // Başlangıçta aktif kabul et, storage'dan gelen mesajla güncelle.
       let adblockActive = true;
       window.addEventListener('message', (e) => {
-        if (e.data?.type === 'JARVIS_ADBLOCK_STATE') {
+        if (e.data?.type === 'CORE_ADBLOCK_STATE') {
           adblockActive = e.data.enabled;
         }
       });
@@ -46,10 +46,10 @@ export default defineContentScript({
         }
         
         // Zaten eklendiyse tekrar ekleme
-        if (document.getElementById('jarvis-yt-adblock-style')) return;
+        if (document.getElementById('core-yt-adblock-style')) return;
         
         const style = document.createElement('style');
-        style.id = 'jarvis-yt-adblock-style';
+        style.id = 'core-yt-adblock-style';
         style.textContent = `
           .ytp-ad-module,
           .ytp-ad-overlay-slot,

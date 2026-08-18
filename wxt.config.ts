@@ -9,7 +9,7 @@ export default defineConfig({
     },
   }),
   manifest: {
-    name: 'Jarvis Assistant',
+    name: 'Core Assistant',
     description:
       'Sekme gruplama, oturum yönetimi, okuma modu, odaklanma kalkanı ve daha fazlası.',
     version: '0.1.0',
@@ -23,7 +23,7 @@ export default defineConfig({
     declarative_net_request: {
       rule_resources: [
         {
-          id: 'jarvis-adblock',
+          id: 'core-adblock',
           enabled: false,
           path: 'rules/adblock.json'
         }
@@ -36,7 +36,7 @@ export default defineConfig({
       '128': 'icon-128.png',
     },
     action: {
-      default_title: 'Jarvis Assistant',
+      default_title: 'Core Assistant',
       default_icon: {
         '16': 'icon-16.png',
         '32': 'icon-32.png',
@@ -46,7 +46,7 @@ export default defineConfig({
     },
     browser_specific_settings: {
       gecko: {
-        id: "jarvis@assistant.com",
+        id: "core@assistant.com",
         strict_min_version: "109.0"
       }
     },

@@ -531,7 +531,7 @@ async function sendReadingMode(enabled: boolean, theme: ReadingTheme): Promise<v
   clearStatusAfter();
 }
 
-/* ------------------------------ Site Teması (Jarvis) ------------------------------ */
+/* ------------------------------ Site Teması (Core) ------------------------------ */
 
 /** Tarayıcı temasının anlık durumunu popup'ta kalıcı olarak gösterir. */
 async function refreshThemeState(): Promise<void> {
