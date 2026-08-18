@@ -13,7 +13,8 @@ export type BackgroundMessage =
   | { type: 'START_WORK_MODE'; minutes: number }
   | { type: 'STOP_WORK_MODE' }
   | { type: 'GESTURE'; action: GestureAction }
-  | { type: 'CLEAR_HISTORY'; minutes: number };
+  | { type: 'CLEAR_HISTORY'; minutes: number }
+  | { type: 'GET_ADBLOCK_STATE' };
 
 export type Message = BackgroundMessage;
 
