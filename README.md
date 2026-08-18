@@ -1,4 +1,4 @@
-# 🤖 Core Assistant
+# ☁️✨ Core Assistant
 
 Çok amaçlı bir Chromium tarayıcı eklentisi. Sekmeleri yönetmek, odaklanmak ve okumayı kolaylaştırmak için 10 özelliği tek eklentide toplar.
 

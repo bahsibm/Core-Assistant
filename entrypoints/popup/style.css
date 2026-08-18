@@ -21,6 +21,8 @@ body {
   overflow-y: auto;
   font-family: 'Cascadia Code', 'Consolas', ui-monospace, 'SF Mono', 'Menlo', monospace;
   background: var(--bg);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><defs><g id="c"><path fill="%2338bdf8" fill-opacity="0.07" d="M 30,60 A 15,15 0 0,1 45,45 A 20,20 0 0,1 75,55 A 15,15 0 0,1 75,85 L 30,85 A 12,12 0 0,1 30,60 Z"/></g></defs><use href="%23c" transform="translate(10, 20) scale(1.5)" /><use href="%23c" transform="translate(180, -20) scale(1)" /><use href="%23c" transform="translate(70, 150) scale(2)" /><use href="%23c" transform="translate(220, 180) scale(1.2)" /></svg>');
+  background-size: 300px 300px;
   color: var(--fg);
   font-size: 13px;
 }
