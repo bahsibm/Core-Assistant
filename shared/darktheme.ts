@@ -1,47 +1,47 @@
-export const STYLE_ID = 'jarvis-dark-override';
+export const STYLE_ID = 'core-dark-override';
 
 export const DARK_THEME_CSS = `
-/* Jarvis Akıllı Tersine Çevirme (Filter Mode) */
-html.jarvis-invert {
+/* Core Akıllı Tersine Çevirme (Filter Mode) */
+html.core-invert {
   background-color: #ffffff !important;
   filter: invert(1) hue-rotate(180deg) saturate(1.2) !important;
   color-scheme: dark !important;
 }
 
 /* Tersine çevrilince beyaz parlayan gölgeleri tamamen kapat (Hover beyazlamasını çözer) */
-html.jarvis-invert * {
+html.core-invert * {
   box-shadow: none !important;
 }
 
 /* Medya elementlerini eski haline döndür (Yoksa negatif röntgen gibi görünürler) */
-html.jarvis-invert img,
-html.jarvis-invert video,
-html.jarvis-invert iframe,
-html.jarvis-invert canvas,
-html.jarvis-invert picture,
-html.jarvis-invert embed,
-html.jarvis-invert object {
+html.core-invert img,
+html.core-invert video,
+html.core-invert iframe,
+html.core-invert canvas,
+html.core-invert picture,
+html.core-invert embed,
+html.core-invert object {
   filter: saturate(0.8333) hue-rotate(180deg) invert(1) !important;
 }
 
 /* Koyu arka planlı medya elementlerinin içindeki SVG'ler bozulmasın */
-html.jarvis-invert svg {
+html.core-invert svg {
   color-scheme: light !important;
 }
 
 /* ── YOUTUBE ÖZEL DÜZELTMELERİ ── */
 /* Logonun filtresini tersine çevirerek kırmızıyı %100 orijinal yaparız. */
-html.jarvis-invert ytd-topbar-logo-renderer {
+html.core-invert ytd-topbar-logo-renderer {
   filter: saturate(0.8333) hue-rotate(180deg) invert(1) !important;
 }
 /* Sadece "YouTube" yazısının harflerini beyaz yap. (Kırmızı butonu ellemek yok) */
-html.jarvis-invert ytd-topbar-logo-renderer #youtube-paths path,
-html.jarvis-invert ytd-topbar-logo-renderer svg path:not([fill]) {
+html.core-invert ytd-topbar-logo-renderer #youtube-paths path,
+html.core-invert ytd-topbar-logo-renderer svg path:not([fill]) {
   fill: #ffffff !important;
 }
 
 /* Fareyle üzerine gelince çıkan siyah bilgi kutucuklarının beyaz parlamasını engelle */
-html.jarvis-invert tp-yt-paper-tooltip {
+html.core-invert tp-yt-paper-tooltip {
   filter: saturate(0.8333) hue-rotate(180deg) invert(1) !important;
 }
 `;
@@ -86,17 +86,17 @@ export function startDarkObserver(doc: Document): void {
   injectDarkCSS(doc);
 
   if (isSiteAlreadyDark()) {
-    doc.documentElement.classList.remove('jarvis-invert');
+    doc.documentElement.classList.remove('core-invert');
   } else {
-    doc.documentElement.classList.add('jarvis-invert');
+    doc.documentElement.classList.add('core-invert');
   }
 
   if (!checkInterval) {
     checkInterval = window.setInterval(() => {
       if (isSiteAlreadyDark()) {
-        doc.documentElement.classList.remove('jarvis-invert');
+        doc.documentElement.classList.remove('core-invert');
       } else {
-        doc.documentElement.classList.add('jarvis-invert');
+        doc.documentElement.classList.add('core-invert');
       }
     }, 2000);
   }
@@ -112,7 +112,7 @@ export function stopDarkObserver(): void {
 
 export function revertAll(doc: Document): void {
   if (typeof window === 'undefined') return;
-  doc.documentElement.classList.remove('jarvis-invert');
+  doc.documentElement.classList.remove('core-invert');
 }
 
 export function injectDarkCSS(doc: Document): void {

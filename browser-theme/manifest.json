@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Jarvis Dark Browser Theme",
-  "short_name": "Jarvis Dark Theme",
+  "name": "Core Dark Browser Theme",
+  "short_name": "Core Dark Theme",
   "version": "0.1.0",
-  "description": "Jarvis Assistant için koyu tarayıcı teması — adres çubuğu, sekmeler ve yeni sekme sayfasını koyulaştırır. Ana eklenti koyu modda bunu otomatik açar/kapatır.",
+  "description": "Core Assistant için koyu tarayıcı teması — adres çubuğu, sekmeler ve yeni sekme sayfasını koyulaştırır. Ana eklenti koyu modda bunu otomatik açar/kapatır.",
   "theme": {
     "colors": {
       "frame": [24, 26, 27],

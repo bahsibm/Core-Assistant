@@ -1,6 +1,6 @@
-# 🤖 Jarvis Assistant
+# 🤖 Core Assistant
 
-Çok amaçlı bir Chromium tarayıcı eklentisi. Sekmeleri yönetmek, odaklanmak ve okumayı kolaylaştırmak için 8 özelliği tek eklentide toplar.
+Çok amaçlı bir Chromium tarayıcı eklentisi. Sekmeleri yönetmek, odaklanmak ve okumayı kolaylaştırmak için 10 özelliği tek eklentide toplar.
 
 ## Özellikler
 
@@ -8,6 +8,8 @@
 |---|---|
 | 🗂️ Akıllı Sekme Gruplama | Aynı siteye veya konuya ait sekmeleri otomatik gruplar (siteye göre / konuya göre / seçime göre). |
 | 💾 Oturum Yöneticisi | "İş / Eğlence / Araştırma" gibi çalışma alanlarına sekmeleri kaydet ve tek tıkla geri çağır. |
+| 🛡️ Reklam Engelleyici (Ad Blocker) | Web sitelerindeki rahatsız edici reklamları ve izleyicileri otomatik olarak engeller. |
+| 🌙 Karanlık Tema | Göz yorgunluğunu azaltmak için web sayfalarını karanlık renklere bürür. |
 | 📖 Okuma Modu | Reklamları ve dağıtan öğeleri kaldırıp metni sepya/koyu/açık temayla rahat okunur hâle getirir. |
 | ⏳ Dikkat Kalkanı | Belirlenen süre boyunca sosyal medya ve haber sitelerini engeller (Pomodoro tarzı). |
 | 🖱️ Fare Hareketleri | Sağ tıkla çiz: ← geri, → ileri, ↑ yukarı kaydır, ↓ sekmeyi kapat. |

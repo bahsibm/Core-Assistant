@@ -1,5 +1,5 @@
 {
-  "name": "jarvis-assistant",
+  "name": "core-assistant",
   "description": "Çok amaçlı sekme ve odaklanma asistanı tarayıcı eklentisi",
   "private": true,
   "version": "0.1.0",
