@@ -219,6 +219,10 @@ async function handleMessage(
     case 'CLEAR_HISTORY':
       await clearHistory(message.minutes);
       return { ok: true };
+    case 'GET_ADBLOCK_STATE': {
+      const s = await getSettings();
+      return { ok: true, adblockEnabled: s.adblockEnabled } as any;
+    }
     default:
       return { ok: false, error: 'Bilinmeyen mesaj türü.' };
   }
