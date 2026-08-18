@@ -11,7 +11,7 @@ export default defineConfig({
   manifest: {
     name: 'Core Assistant',
     description:
-      'Sekme gruplama, oturum yönetimi, okuma modu, odaklanma kalkanı ve daha fazlası.',
+      'Tab grouping, session management, reading mode, focus shield, and more.',
     version: '0.1.0',
     // İzinler özellik ekledikçe büyür. Şimdilik yalnızca "Akıllı Sekme Gruplama" için.
     permissions: [

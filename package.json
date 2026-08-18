@@ -1,6 +1,6 @@
 {
   "name": "core-assistant",
-  "description": "Çok amaçlı sekme ve odaklanma asistanı tarayıcı eklentisi",
+  "description": "Multi-purpose tab and focus assistant browser extension",
   "private": true,
   "version": "0.1.0",
   "type": "module",

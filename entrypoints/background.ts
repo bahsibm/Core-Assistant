@@ -37,22 +37,22 @@ export default defineBackground(() => {
     browser.contextMenus.removeAll().then(() => {
       browser.contextMenus.create({
         id: 'translate-selection',
-        title: 'Bunu Çevir',
+        title: 'Translate This',
         contexts: ['selection'],
       });
       browser.contextMenus.create({
         id: 'summarize-selection',
-        title: 'Özetle',
+        title: 'Summarize',
         contexts: ['selection'],
       });
       browser.contextMenus.create({
         id: 'summarize-page',
-        title: 'Bu Sayfayı Özetle',
+        title: 'Summarize This Page',
         contexts: ['page'],
       });
       browser.contextMenus.create({
         id: 'save-image',
-        title: 'Görseli Kaydet',
+        title: 'Save Image',
         contexts: ['image'],
       });
     });
@@ -64,22 +64,22 @@ export default defineBackground(() => {
     browser.contextMenus.removeAll().then(() => {
       browser.contextMenus.create({
         id: 'translate-selection',
-        title: 'Bunu Çevir',
+        title: 'Translate This',
         contexts: ['selection'],
       });
       browser.contextMenus.create({
         id: 'summarize-selection',
-        title: 'Özetle',
+        title: 'Summarize',
         contexts: ['selection'],
       });
       browser.contextMenus.create({
         id: 'summarize-page',
-        title: 'Bu Sayfayı Özetle',
+        title: 'Summarize This Page',
         contexts: ['page'],
       });
       browser.contextMenus.create({
         id: 'save-image',
-        title: 'Görseli Kaydet',
+        title: 'Save Image',
         contexts: ['image'],
       });
     });
@@ -92,23 +92,23 @@ export default defineBackground(() => {
     } else if (info.menuItemId === 'summarize-selection' && info.selectionText && tab?.id) {
       const summary = summarize(info.selectionText);
       browser.tabs.sendMessage(tab.id, { type: 'SHOW_SUMMARY', summary })
-        .catch((err) => console.error('SHOW_SUMMARY mesajı başarısız:', err));
+        .catch((err) => console.error('SHOW_SUMMARY message failed:', err));
     } else if (info.menuItemId === 'summarize-page' && tab?.id) {
       browser.tabs.sendMessage(tab.id, { type: 'SUMMARIZE_PAGE' })
-        .catch((err) => console.error('SUMMARIZE_PAGE mesajı başarısız:', err));
+        .catch((err) => console.error('SUMMARIZE_PAGE message failed:', err));
     } else if (info.menuItemId === 'save-image' && info.srcUrl && tab) {
       browser.downloads.download({
         url: info.srcUrl,
         saveAs: false,
-      }).catch((err) => console.warn('Görsel indirilemedi:', err));
+      }).catch((err) => console.warn('Failed to download image:', err));
     }
   });
 
   browser.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === IDLE_ALARM) {
-      discardIdleTabs().catch((err) => console.warn('Atıl sekme kontrolü:', err));
+      discardIdleTabs().catch((err) => console.warn('Idle tab check:', err));
     } else if (alarm.name === WORK_MODE_ALARM) {
-      stopWorkMode().catch((err) => console.warn('Çalışma modu bitişi:', err));
+      stopWorkMode().catch((err) => console.warn('Work mode end:', err));
     }
   });
 
@@ -159,15 +159,15 @@ async function syncAdblockState(): Promise<void> {
       await browser.declarativeNetRequest.updateEnabledRulesets({
         enableRulesetIds: [rulesetId],
       });
-      console.log('[Core] AdBlock aktif edildi.');
+      console.log('[Core] AdBlock enabled.');
     } else if (!isEnabled && isActive) {
       await browser.declarativeNetRequest.updateEnabledRulesets({
         disableRulesetIds: [rulesetId],
       });
-      console.log('[Core] AdBlock kapatıldı.');
+      console.log('[Core] AdBlock disabled.');
     }
   } catch (err) {
-    console.warn('AdBlock senkronizasyonu başarısız:', err);
+    console.warn('AdBlock sync failed:', err);
   }
 }
 
@@ -224,7 +224,7 @@ async function handleMessage(
       return { ok: true, adblockEnabled: s.adblockEnabled } as any;
     }
     default:
-      return { ok: false, error: 'Bilinmeyen mesaj türü.' };
+      return { ok: false, error: 'Unknown message type.' };
   }
 }
 
@@ -246,7 +246,7 @@ async function groupTabs(mode: GroupMode): Promise<number> {
     typeof browser.tabGroups?.update !== 'function'
   ) {
     throw new Error(
-      'Bu tarayıcıda sekme gruplama API\'si (tabGroups) desteklenmiyor.',
+      'Tab grouping API is not supported in this browser.',
     );
   }
 
@@ -334,12 +334,12 @@ async function groupSelected(tabIds: number[], name: string): Promise<number> {
     typeof browser.tabGroups?.update !== 'function'
   ) {
     throw new Error(
-      'Bu tarayıcıda sekme gruplama API\'si (tabGroups) desteklenmiyor.',
+      'Tab grouping API is not supported in this browser.',
     );
   }
-  if (tabIds.length < 2) throw new Error('Grup için en az 2 sekme seç.');
+  if (tabIds.length < 2) throw new Error('Select at least 2 tabs for a group.');
 
-  const title = name.trim() || 'Özel Grup';
+  const title = name.trim() || 'Custom Group';
   const groupId = (await browser.tabs.group({ tabIds: tabIds as [number, ...number[]] })) as unknown as number;
   await browser.tabGroups.update(groupId, {
     title,
@@ -356,11 +356,11 @@ function newId(): string {
 }
 
 async function saveSession(name: string, tabs: SessionTab[]): Promise<void> {
-  if (tabs.length === 0) throw new Error('Kaydedilecek sekme yok.');
+  if (tabs.length === 0) throw new Error('No tabs to save.');
 
   const session: Session = {
     id: newId(),
-    name: name.trim() || 'Adsız Oturum',
+    name: name.trim() || 'Untitled Session',
     createdAt: Date.now(),
     tabs,
   };
@@ -373,13 +373,13 @@ async function saveSession(name: string, tabs: SessionTab[]): Promise<void> {
 async function restoreSession(id: string): Promise<void> {
   const sessions = await getSessions();
   const session = sessions.find((s) => s.id === id);
-  if (!session) throw new Error('Oturum bulunamadı.');
+  if (!session) throw new Error('Session not found.');
 
   const urls = session.tabs
     .map((t) => t.url)
     .filter((u) => u.startsWith('http://') || u.startsWith('https://'));
 
-  if (urls.length === 0) throw new Error('Bu oturumda açılabilir sekme yok.');
+  if (urls.length === 0) throw new Error('No openable tabs in this session.');
 
   // Mevcut pencerede yeni sekmeler olarak aç (ayrı pencere değil).
   for (const url of urls) {
@@ -480,7 +480,7 @@ async function handleGesture(action: GestureAction, tabId?: number): Promise<voi
         break;
     }
   } catch (err) {
-    console.warn('Fare hareketi uygulanamadı:', action, err);
+    console.warn('Mouse gesture failed:', action, err);
   }
 }
 
@@ -543,7 +543,7 @@ async function maybeBlock(tabId: number, url: string): Promise<void> {
         url: browser.runtime.getURL('/blocked.html'),
       });
     } catch (err) {
-      console.warn('Engelleme yönlendirmesi başarısız:', err);
+      console.warn('Block redirection failed:', err);
     }
   }
 }

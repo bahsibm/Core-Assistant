@@ -97,7 +97,7 @@ function renderFrame(theme: ReadingTheme): void {
     closeBtn = document.createElement('button');
     closeBtn.type = 'button';
     closeBtn.textContent = '✕';
-    closeBtn.title = 'Okuma modunu kapat';
+    closeBtn.title = 'Close reading mode';
     closeBtn.style.cssText =
       'position: fixed; top: 14px; right: 14px; z-index: 2147483647; width: 38px; height: 38px; border-radius: 50%; border: none; background: rgba(0,0,0,0.55) !important; color: #fff !important; font-size: 18px !important; line-height: 1; cursor: pointer;';
     closeBtn.addEventListener('click', disableReading);
@@ -255,21 +255,21 @@ function showSummaryOverlay(summary: string): void {
 
   const title = document.createElement('strong');
   title.style.cssText = 'font-size:17px;color:#0f172a;';
-  title.textContent = '📋 Özet';
+  title.textContent = '📋 Summary';
 
   const btnGroup = document.createElement('div');
   btnGroup.style.cssText = 'display:flex;gap:8px;';
 
   const copyBtn = document.createElement('button');
   copyBtn.type = 'button';
-  copyBtn.textContent = 'Kopyala';
+  copyBtn.textContent = 'Copy';
   copyBtn.style.cssText =
     'border:1px solid #d1d5db;background:#f9fafb;color:#374151;border-radius:6px;' +
     'padding:4px 12px;font-size:13px;cursor:pointer;';
   copyBtn.addEventListener('click', () => {
     navigator.clipboard.writeText(summary).then(() => {
-      copyBtn.textContent = 'Kopyalandı ✓';
-      setTimeout(() => { copyBtn.textContent = 'Kopyala'; }, 1500);
+      copyBtn.textContent = 'Copied ✓';
+      setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1500);
     });
   });
 
@@ -317,7 +317,7 @@ function closeSummaryOverlay(): void {
 export default defineContentScript({
   matches: ['<all_urls>'],
   main(ctx) {
-    console.log('Sekme Asistanı: İçerik betiği başlatıldı.');
+    console.log('Core Assistant: Content script started.');
     ctx.onInvalidated(() => location.reload());
 
     // ── Mesaj dinleyicisi ──
@@ -328,31 +328,31 @@ export default defineContentScript({
             const ok = message.enabled ? enableReading(message.theme) : (disableReading(), true);
             sendResponse({ ok });
           } catch (err) {
-            console.error('Okuma modu hatası:', err);
+            console.error('Reading mode error:', err);
             sendResponse({
               ok: false,
               error: err instanceof Error ? err.message : String(err),
             });
           }
         } else if (message.type === 'SHOW_SUMMARY') {
-          console.log('Sekme Asistanı: SHOW_SUMMARY mesajı alındı.', message.summary);
+          console.log('Core Assistant: SHOW_SUMMARY message received.', message.summary);
           showSummaryOverlay(message.summary);
           sendResponse({ ok: true });
         } else if (message.type === 'SUMMARIZE_PAGE') {
-          console.log('Sekme Asistanı: SUMMARIZE_PAGE mesajı alındı.');
+          console.log('Core Assistant: SUMMARIZE_PAGE message received.');
           try {
             const clone = document.cloneNode(true) as Document;
             resolveLazyImages(clone);
             const article = new Readability(clone).parse();
             if (article && article.textContent) {
               const summary = summarize(article.textContent, 8); // Tüm sayfada daha kapsamlı (8 cümle)
-              showSummaryOverlay(summary || 'Bu sayfadan özetlenecek yeterli metin bulunamadı.');
+              showSummaryOverlay(summary || 'Not enough text found to summarize on this page.');
             } else {
-              showSummaryOverlay('Bu sayfadan içerik çıkarılamadı (belki makale değil veya çok kısa).');
+              showSummaryOverlay('Could not extract content from this page (maybe not an article or too short).');
             }
             sendResponse({ ok: true });
           } catch (err) {
-            console.error('Sayfa özetleme hatası:', err);
+            console.error('Page summarization error:', err);
             sendResponse({ ok: false });
           }
         }

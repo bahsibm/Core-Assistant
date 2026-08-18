@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "Core Dark Browser Theme",
   "short_name": "Core Dark Theme",
-  "version": "0.1.0",
-  "description": "Core Assistant için koyu tarayıcı teması — adres çubuğu, sekmeler ve yeni sekme sayfasını koyulaştırır. Ana eklenti koyu modda bunu otomatik açar/kapatır.",
+  "version": "1.0",
+  "description": "Dark browser theme for Core Assistant — darkens the address bar, tabs, and new tab page. The main extension toggles this automatically in dark mode.",
   "theme": {
     "colors": {
       "frame": [24, 26, 27],

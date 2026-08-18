@@ -1,69 +1,32 @@
 # ☁️✨ Core Assistant
 
-Çok amaçlı bir Chromium tarayıcı eklentisi. Sekmeleri yönetmek, odaklanmak ve okumayı kolaylaştırmak için 10 özelliği tek eklentide toplar.
+A multi-purpose Chromium browser extension. It brings 10 essential features together to manage tabs, focus, and read comfortably on the web.
 
-## Özellikler
+## 🚀 Features
 
-| Özellik | Açıklama |
+| Feature | Description |
 |---|---|
-| 🗂️ Akıllı Sekme Gruplama | Aynı siteye veya konuya ait sekmeleri otomatik gruplar (siteye göre / konuya göre / seçime göre). |
-| 💾 Oturum Yöneticisi | "İş / Eğlence / Araştırma" gibi çalışma alanlarına sekmeleri kaydet ve tek tıkla geri çağır. |
-| 🛡️ Reklam Engelleyici (Ad Blocker) | Web sitelerindeki rahatsız edici reklamları ve izleyicileri otomatik olarak engeller. |
-| 🌙 Karanlık Tema | Göz yorgunluğunu azaltmak için web sayfalarını karanlık renklere bürür. |
-| 📖 Okuma Modu | Reklamları ve dağıtan öğeleri kaldırıp metni sepya/koyu/açık temayla rahat okunur hâle getirir. |
-| ⏳ Dikkat Kalkanı | Belirlenen süre boyunca sosyal medya ve haber sitelerini engeller (Pomodoro tarzı). |
-| 🖱️ Fare Hareketleri | Sağ tıkla çiz: ← geri, → ileri, ↑ yukarı kaydır, ↓ sekmeyi kapat. |
-| 📋 Bağlamsal Sağ Tık Menüsü | Seçili metni çevir/özetle; görseli kaydet. |
-| 😴 Uyuyan Sekmeler | Dokunulmayan sekmeleri otomatik dondurarak RAM'i rahatlatır. |
-| 🧹 Tek Tık Temizlik | Son 1 saatin çerezlerini ve önbelleğini tek tıkla temizler. |
+| 🗂️ Smart Tab Grouping | Automatically groups tabs from the same site or topic (by site / by topic / by selection). |
+| 💾 Session Manager | Save tabs into workspaces like "Work / Entertainment / Research" and restore them with one click. |
+| 🛡️ Ad Blocker | Built-in Manifest V3 AdBlock logic to hide pop-ups and ads across all sites. |
+| 🌙 Dark Theme | Turns any website into a comfortable dark mode instantly. |
+| 📖 Reading Mode | Removes clutter, sidebars, and ads to make articles readable (Light, Sepia, Dark themes). |
+| ⏳ Focus Shield | Work Mode blocks social media and news sites for a set duration. |
+| 🖱️ Mouse Gestures | Right-click and drag: ← back, → forward, ↑ scroll up, ↓ close tab. |
+| ✨ Quick Summary | Right-click any text or page to get an instant AI-like summary (uses TextRank). |
+| 😴 Sleeping Tabs | Freezes idle tabs to free up memory and save battery. |
+| 🧹 One-Click Cleanup | Clears cookies, cache, and browsing history from the last hour or day instantly. |
 
-## Teknoloji
+## 📦 Installation
 
-- **TypeScript + WXT** (Manifest V3)
-- Metin özetleme: yerleşik TextRank + IDF + MMR (çevrimdışı, ücretsiz — API anahtarı gerekmez)
-- Okuma modu: Mozilla Readability
+1. Go to `chrome://extensions/`
+2. Enable **Developer mode** in the top right.
+3. Click **Load unpacked** and select the `.output/chrome-mv3` folder.
 
-## Kurulum (Geliştirici modu)
+## 🛠️ Tech Stack
+- [WXT](https://wxt.dev/) (Vite + Vue/React ready, currently vanilla TS)
+- Manifest V3
+- @mozilla/readability (For Reading Mode)
 
-1. Bağımlılıkları kur:
-   ```bash
-   npm install
-   ```
-
-2. Derle:
-   ```bash
-   npm run build
-   ```
-
-3. Tarayıcıda `chrome://extensions` (veya `edge://extensions`) aç.
-4. Sağ üstte **Geliştirici modu**'nu aç.
-5. **"Paketlenmemiş öğe yükle"** → `.output/chrome-mv3` klasörünü seç.
-
-## Geliştirme
-
-Sıcak yenileme (hot reload) için:
-```bash
-npm run dev
-```
-
-Dağıtım için zip:
-```bash
-npm run zip
-```
-
-## Klasör yapısı
-
-```
-entrypoints/
-├── background.ts      # Servis worker (tüm arka plan mantığı)
-├── content.ts         # İçerik betiği (okuma modu, fare hareketleri, özet paneli)
-├── popup/             # Eklenti açılır paneli
-├── options/           # Ayarlar sayfası
-└── blocked/           # Çalışma modu engelleme sayfası
-shared/
-├── storage.ts         # Ayarlar/oturum depolama
-├── messages.ts        # Mesaj tipleri
-├── domains.ts         # Alan adı/konu sezgiseli
-├── types.ts           # Ortak tipler
-└── textrank.ts        # Özetleme algoritması
-```
+## 📄 License
+MIT License.
