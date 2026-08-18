@@ -12,6 +12,7 @@ declare module "wxt/browser" {
     | "/content-scripts/cosmetic-filter.js"
     | "/content-scripts/dark-inject.js"
     | "/content-scripts/youtube-adblock.js"
+    | "/icon_transparent.png"
     | "/icon-128.png"
     | "/icon-16.png"
     | "/icon-32.png"
