@@ -5,3 +5,8 @@ node_modules/
 stats.html
 .DS_Store
 .claude/settings.local.json
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
