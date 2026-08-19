@@ -19,9 +19,10 @@ A multi-purpose Chromium browser extension. It brings 10 essential features toge
 
 ## 📦 Installation
 
-1. Go to `chrome://extensions/`
-2. Enable **Developer mode** in the top right.
-3. Click **Load unpacked** and select the `.output/chrome-mv3` folder.
+1. Download the latest `.zip` from [**Releases**](https://github.com/bahsibm/Core-Assistant/releases/latest).
+2. Extract the ZIP to a folder.
+3. Go to `chrome://extensions/` and enable **Developer mode** (top right).
+4. Click **Load unpacked** and select the extracted folder.
 
 ## 🛠️ Tech Stack
 - [WXT](https://wxt.dev/) (Vite + Vue/React ready, currently vanilla TS)
